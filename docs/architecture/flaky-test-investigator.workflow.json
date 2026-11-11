@@ -1,0 +1,273 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Flaky Test Investigator: how the subagent separates real regressions from noise",
+    "output": "docs/architecture/flaky-test-investigator.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "lanes": [
+    {
+      "id": "caller",
+      "label": "Orchestrator"
+    },
+    {
+      "id": "sub",
+      "label": "Subagent checks"
+    },
+    {
+      "id": "out",
+      "label": "Classification",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "handoff",
+      "label": "Hand-off",
+      "fromCol": 0,
+      "toCol": 0
+    },
+    {
+      "id": "triage",
+      "label": "Decision order",
+      "fromCol": 1,
+      "toCol": 5,
+      "variant": "emphasis"
+    }
+  ],
+  "groups": [
+    {
+      "id": "readonly",
+      "label": "Read-only: packet only, no tool access",
+      "lane": "sub",
+      "fromCol": 1,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "mainPath": [
+    "orch",
+    "enough",
+    "commit",
+    "env",
+    "conflict",
+    "timing",
+    "contract"
+  ],
+  "nodes": [
+    {
+      "id": "orch",
+      "lane": "caller",
+      "col": 0,
+      "type": "backend",
+      "label": "Council or Quality Engine",
+      "sublabel": "sends evidence packet"
+    },
+    {
+      "id": "enough",
+      "lane": "sub",
+      "col": 1,
+      "type": "backend",
+      "icon": "decision",
+      "label": "3+ runs, any fail?",
+      "sublabel": "else stop"
+    },
+    {
+      "id": "commit",
+      "lane": "sub",
+      "col": 2,
+      "type": "backend",
+      "icon": "decision",
+      "label": "Commit-correlated?",
+      "sublabel": "pass before, fail after"
+    },
+    {
+      "id": "env",
+      "lane": "sub",
+      "col": 3,
+      "type": "backend",
+      "icon": "decision",
+      "label": "One env or infra errors?",
+      "sublabel": "runner, 503, OOM"
+    },
+    {
+      "id": "conflict",
+      "lane": "sub",
+      "col": 4,
+      "type": "backend",
+      "icon": "decision",
+      "label": "Conflict errors?",
+      "sublabel": "409, duplicate"
+    },
+    {
+      "id": "timing",
+      "lane": "sub",
+      "col": 5,
+      "type": "backend",
+      "icon": "decision",
+      "label": "Timeouts or flip?",
+      "sublabel": "same commit both ways"
+    },
+    {
+      "id": "insufficient",
+      "lane": "out",
+      "col": 1,
+      "type": "external",
+      "label": "Insufficient / stable",
+      "sublabel": "unknown is not pass"
+    },
+    {
+      "id": "regression",
+      "lane": "out",
+      "col": 2,
+      "type": "security",
+      "label": "App regression",
+      "sublabel": "or selector churn",
+      "tag": "real defect"
+    },
+    {
+      "id": "environment",
+      "lane": "out",
+      "col": 3,
+      "type": "cloud",
+      "label": "Environment",
+      "sublabel": "platform owns"
+    },
+    {
+      "id": "data",
+      "lane": "out",
+      "col": 4,
+      "type": "database",
+      "label": "Data collision",
+      "sublabel": "QE owns"
+    },
+    {
+      "id": "race",
+      "lane": "out",
+      "col": 5,
+      "type": "messagebus",
+      "label": "Timing race",
+      "sublabel": "else unclassified"
+    },
+    {
+      "id": "contract",
+      "lane": "caller",
+      "col": 5,
+      "type": "external",
+      "label": "JSON contract to QE owner",
+      "sublabel": "real_regressions, noise"
+    }
+  ],
+  "edges": [
+    {
+      "id": "send",
+      "from": "orch",
+      "to": "enough",
+      "label": "packet",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e2",
+      "from": "enough",
+      "to": "commit",
+      "label": "yes",
+      "variant": "default"
+    },
+    {
+      "id": "e3",
+      "from": "commit",
+      "to": "env",
+      "label": "no",
+      "variant": "default"
+    },
+    {
+      "id": "e4",
+      "from": "env",
+      "to": "conflict",
+      "label": "no",
+      "variant": "default"
+    },
+    {
+      "id": "e5",
+      "from": "conflict",
+      "to": "timing",
+      "label": "no",
+      "variant": "default"
+    },
+    {
+      "id": "e6",
+      "from": "timing",
+      "to": "contract",
+      "variant": "emphasis",
+      "label": "classified"
+    },
+    {
+      "id": "b1",
+      "from": "enough",
+      "to": "insufficient",
+      "label": "no",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "b2",
+      "from": "commit",
+      "to": "regression",
+      "label": "yes",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "b3",
+      "from": "env",
+      "to": "environment",
+      "label": "yes",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "b4",
+      "from": "conflict",
+      "to": "data",
+      "label": "yes",
+      "variant": "dashed",
+      "role": "branch"
+    },
+    {
+      "id": "b5",
+      "from": "timing",
+      "to": "race",
+      "label": "yes",
+      "variant": "dashed",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Never call a regression noise",
+      "items": [
+        "Commit correlation wins over environment correlation; both are reported",
+        "Generic errors become UNCLASSIFIED with a logging-gap note"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Subagent contract",
+      "items": [
+        "Every outcome is written to the versioned JSON contract",
+        "Caller reads real_regressions and noise directly; the QE owner decides"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Demo",
+      "items": [
+        "8 fictional tests cover every class",
+        "Only T-101 is a real regression"
+      ]
+    }
+  ]
+}

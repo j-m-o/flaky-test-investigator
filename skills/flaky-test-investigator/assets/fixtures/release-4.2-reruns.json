@@ -1,0 +1,335 @@
+{
+  "scope": "Fictional release 4.2 (checkout and account areas)",
+  "tests": [
+    {
+      "id": "T-101",
+      "name": "checkout: apply promo code",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "a1",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "a1",
+          "env": "ci-west",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r3",
+          "commit": "b2",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "AssertionError: expected total 90.00 to equal 81.00"
+        },
+        {
+          "run_id": "r4",
+          "commit": "b2",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "AssertionError: expected total 90.00 to equal 81.00"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "AssertionError: expected total 90.00 to equal 81.00"
+        },
+        {
+          "run_id": "r6",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "AssertionError: expected total 90.00 to equal 81.00"
+        }
+      ]
+    },
+    {
+      "id": "T-102",
+      "name": "checkout: pay with saved card",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "a1",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "a1",
+          "env": "ci-west",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r3",
+          "commit": "b2",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "TimeoutError: locator('#pay-now') element not found"
+        },
+        {
+          "run_id": "r4",
+          "commit": "b2",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "TimeoutError: locator('#pay-now') element not found"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "locator('#pay-now') element not found"
+        },
+        {
+          "run_id": "r6",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "locator('#pay-now') element not found"
+        }
+      ]
+    },
+    {
+      "id": "T-103",
+      "name": "account: download invoice PDF",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "a1",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "a1",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "Error: ECONNRESET from storage-proxy"
+        },
+        {
+          "run_id": "r3",
+          "commit": "b2",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r4",
+          "commit": "b2",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "503 Service Unavailable from storage-proxy"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r6",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "Error: ECONNRESET from storage-proxy"
+        }
+      ]
+    },
+    {
+      "id": "T-104",
+      "name": "signup: create workspace",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass",
+          "data_key": "ws-demo",
+          "window": "w1"
+        },
+        {
+          "run_id": "r2",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "409 Conflict: workspace already exists",
+          "data_key": "ws-demo",
+          "window": "w1"
+        },
+        {
+          "run_id": "r3",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass",
+          "data_key": "ws-demo",
+          "window": "w2"
+        },
+        {
+          "run_id": "r4",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass",
+          "data_key": "ws-demo",
+          "window": "w3"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "409 Conflict: workspace already exists",
+          "data_key": "ws-demo",
+          "window": "w4"
+        },
+        {
+          "run_id": "r6",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass",
+          "data_key": "ws-demo",
+          "window": "w4"
+        }
+      ]
+    },
+    {
+      "id": "T-105",
+      "name": "cart: update quantity",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "Timed out 5000ms waiting for cart total to update"
+        },
+        {
+          "run_id": "r3",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r4",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "Timed out 5000ms waiting for cart total to update"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r6",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass"
+        }
+      ]
+    },
+    {
+      "id": "T-106",
+      "name": "search: filter by category",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r3",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r4",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass"
+        }
+      ]
+    },
+    {
+      "id": "T-107",
+      "name": "admin: export audit CSV",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "AssertionError: expected 12 rows"
+        },
+        {
+          "run_id": "r2",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "pass"
+        }
+      ]
+    },
+    {
+      "id": "T-108",
+      "name": "checkout: tax line",
+      "runs": [
+        {
+          "run_id": "r1",
+          "commit": "a1",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r2",
+          "commit": "b2",
+          "env": "ci-east",
+          "outcome": "fail",
+          "error": "Something went wrong"
+        },
+        {
+          "run_id": "r3",
+          "commit": "b2",
+          "env": "ci-west",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r4",
+          "commit": "c3",
+          "env": "ci-east",
+          "outcome": "pass"
+        },
+        {
+          "run_id": "r5",
+          "commit": "c3",
+          "env": "ci-west",
+          "outcome": "fail",
+          "error": "Something went wrong"
+        },
+        {
+          "run_id": "r6",
+          "commit": "a1",
+          "env": "ci-west",
+          "outcome": "pass"
+        }
+      ]
+    }
+  ]
+}
