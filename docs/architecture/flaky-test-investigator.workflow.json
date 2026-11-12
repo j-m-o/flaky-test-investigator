@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Flaky Test Investigator: how the subagent separates real regressions from noise",
+    "title": "Flaky Test Investigator",
     "output": "docs/architecture/flaky-test-investigator.html",
     "quality_profile": "showcase",
     "locale": "en"
