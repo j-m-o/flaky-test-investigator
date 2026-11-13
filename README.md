@@ -53,7 +53,7 @@ The [output contract](skills/flaky-test-investigator/references/output-contract.
 | Option | Use |
 | --- | --- |
 | `agents/flaky-test-investigator.md` | Copy to `.claude/agents/` and call it as a subagent |
-| `dist/flaky-test-investigator.zip` | Upload as a skill (Claude, Agensi or any SKILL.md agent) |
+| `dist/flaky-test-investigator.zip` | Upload as a skill ([Claude](https://claude.ai), [Agensi](https://agensi.io) or any SKILL.md agent) |
 | `skills/flaky-test-investigator/` | Copy into `~/.claude/skills/` |
 
 ## Part of a connected portfolio
